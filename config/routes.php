@@ -9,5 +9,11 @@ return function (App $app) {
 
     $app->post('/users', \App\Action\UserCreateAction::class);
 
+    // Afficher la liste de tous les livres
+    $app->get('/books', \App\Action\BookViewerAction::class);
+    // Afficher un livre selon son id
+    $app->get('/books/{id}', \App\Action\BookViewerByIdAction::class);
+    // Rechercher un livre par titre
+    $app->post('/books/search', \App\Action\BookSearchByTitleAction::class);
 };
 
