@@ -25,6 +25,7 @@ final class BookViewer
      * The constructor.
      *
      * @param BookViewerRepository $repository The repository
+     * @param LoggerFactory $logger The logger
      */
     public function __construct(BookViewerRepository $repository, LoggerFactory $logger)
     {
