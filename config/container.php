@@ -5,6 +5,7 @@ use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Middleware\ErrorMiddleware;
 use Selective\BasePath\BasePathMiddleware;
+use App\Factory\LoggerFactory;
 
 return [
     'settings' => function () {
@@ -46,6 +47,10 @@ return [
         $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
     
         return new PDO($dsn, $username, $password, $flags);
+    },
+
+    LoggerFactory::class => function (ContainerInterface $container) {
+        return new LoggerFactory($container->get('settings')['logger']);
     },
     
 

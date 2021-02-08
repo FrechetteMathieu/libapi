@@ -2,7 +2,6 @@
 
 use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
-use Slim\Middleware\ErrorMiddleware;
 
 return function (App $app) {
     // Parse json, form data and xml
@@ -14,6 +13,8 @@ return function (App $app) {
     // Add app base path
     $app->add(BasePathMiddleware::class);
 
-    // Catch exceptions and errors
-    $app->add(ErrorMiddleware::class);
+    // Create a custom logger for the ErrorMiddleware
+    $loggerFactory = $app->getContainer()->get(\App\Factory\LoggerFactory::class);
+    $logger = $loggerFactory->addFileHandler('error.log')->createLogger();
+    $app->addErrorMiddleware(true, true, true, $logger);   
 };

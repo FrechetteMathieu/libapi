@@ -3,7 +3,8 @@
 namespace App\Domain\Book\Service;
 
 use App\Domain\Book\Repository\BookViewerRepository;
-use App\Exception\ValidationException;
+use App\Factory\LoggerFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Service.
@@ -16,13 +17,21 @@ final class BookViewer
     private $repository;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * The constructor.
      *
      * @param BookViewerRepository $repository The repository
      */
-    public function __construct(BookViewerRepository $repository)
+    public function __construct(BookViewerRepository $repository, LoggerFactory $logger)
     {
         $this->repository = $repository;
+        $this->logger = $logger
+            ->addFileHandler('BookViewer.log')
+            ->createLogger();
     }
 
     /**
@@ -36,9 +45,9 @@ final class BookViewer
         // Sélectionne tous les livres
         $books = $this->repository->selectAllBook();
 
-        // Logging here: User created successfully
-        //$this->logger->info(sprintf('User created successfully: %s', $books));
-
+        $this->logger->debug(sprintf('Nombre de livres : %s', count($books)));
+        $this->logger->info('Nombre de livres : ' . count($books) . '!!');
+        
         return $books;
     }
 
@@ -52,9 +61,6 @@ final class BookViewer
 
         // Sélectionne tous les livres
         $books = $this->repository->selectBookById($id);
-
-        // Logging here: User created successfully
-        //$this->logger->info(sprintf('User created successfully: %s', $books));
 
         return $books;
     }
