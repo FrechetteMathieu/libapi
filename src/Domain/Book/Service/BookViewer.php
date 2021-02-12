@@ -31,8 +31,8 @@ final class BookViewer
     {
         $this->repository = $repository;
         $this->logger = $logger
-            ->addFileHandler('BookViewer.log')
-            ->createLogger();
+            ->addFileHandler('Books.log')
+            ->createLogger("BookViewer");
     }
 
     /**
@@ -42,12 +42,7 @@ final class BookViewer
      */
     public function viewBook(): array
     {
-
-        // Sélectionne tous les livres
         $books = $this->repository->selectAllBook();
-
-        $this->logger->debug(sprintf('Nombre de livres : %s', count($books)));
-        $this->logger->info('Nombre de livres : ' . count($books) . '!!');
         
         return $books;
     }
@@ -59,8 +54,6 @@ final class BookViewer
      */
     public function viewBookById($id): array
     {
-
-        // Sélectionne tous les livres
         $books = $this->repository->selectBookById($id);
 
         return $books;
