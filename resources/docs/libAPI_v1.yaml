@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: LibAPI
+  description: Un API de livres créé dans le cadre du cours Services Web H2021
+  
+servers: 
+  - url: http://localhost/libapi
+paths:
+  /books:
+    get:
+      tags:
+        - Livre
+      summary: Affiche la liste de tous les livres.
+      responses:
+        '200': 
+          description: Un tableau de livres
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Livres'
+  /books/{id}:
+    get:
+      tags:
+        - Livre
+      summary: Affiche un livre selon son id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Le id du livre à afficher
+          schema:
+            type: integer
+      responses:
+        '200': 
+          description: Le livre à afficher
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Livre'
+  /books/add:
+    post:
+      tags: 
+        - Livre
+      summary: Crée un livre.
+      requestBody:
+        description: Les informations du livre à créer
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                genreId:
+                  type: integer
+                titre:
+                  type: string
+                isbn:
+                  type: string
+              example:
+                genreId : 1
+                titre: Fondation
+                isbn: '9782070463619'
+      responses:
+        '201': 
+          description: Le id du livre créé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  books_id:
+                    type: integer
+                example:
+                  books_id : 1
+components:
+  schemas:
+    Livre:
+      type: object
+      required:
+        - genreId
+        - titre
+        - isbn
+      properties:
+        id:
+          type: integer
+          format: int64
+        genreId:
+          type: integer
+          format: int64
+        titre:
+          type: string
+        isbn:
+          type: string
+      example:
+          id: 1
+          genreId : 1
+          titre: Fondation
+          isbn: '9782070463619'
+    Livres:
+      type: array
+      items:
+        $ref: '#/components/schemas/Livre'
