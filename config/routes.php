@@ -16,11 +16,24 @@ return function (App $app) {
     // Rechercher un livre par titre
     $app->post('/books/search', \App\Action\BookSearchByTitleAction::class);
     // Créer un nouveau livre
-    $app->post('/books/add', \App\Action\BookCreateAction::class);
+    $app->post('/books', \App\Action\BookCreateAction::class);
     // Éditer les informations d’un livre
     $app->put('/books/{id}', \App\Action\BookUpdateAction::class);
     // Supprimer un livre 
     $app->delete('/books/{id}', \App\Action\BookDeleteAction::class);
 
-};
 
+    // Afficher la liste des auteurs
+    $app->get('/authors', \App\Action\AuthorViewAction::class);
+    // Liste tous les livres d’un auteur selon son id
+    $app->get('/authors/{id}/books', \App\Action\AuthorViewBookAction::class);
+    // Créer un auteur
+    // Modifier un auteur
+    // Supprimer un auteur
+
+    // Afficher la liste des genres
+    // Liste tous les livres d’un genre selon son id
+    // Créer un genre
+    // Modifier un genre
+    // Supprimer un genre
+};
