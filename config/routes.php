@@ -9,6 +9,8 @@ return function (App $app) {
 
     $app->post('/users', \App\Action\UserCreateAction::class);
 
+    $app->get('/docs/v1', \App\Action\Docs\SwaggerUiAction::class);
+
     // Afficher la liste de tous les livres
     $app->get('/books', \App\Action\BookViewerAction::class);
     // Afficher un livre selon son id
@@ -21,8 +23,7 @@ return function (App $app) {
     $app->put('/books/{id}', \App\Action\BookUpdateAction::class);
     // Supprimer un livre 
     $app->delete('/books/{id}', \App\Action\BookDeleteAction::class);
-
-
+    
     // Afficher la liste des auteurs
     $app->get('/authors', \App\Action\AuthorViewAction::class);
     // Liste tous les livres d’un auteur selon son id
