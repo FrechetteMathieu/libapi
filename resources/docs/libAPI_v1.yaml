@@ -61,13 +61,40 @@ paths:
                     type: integer
                 example:
                   id : 1
-    
+  
+  /books/{id}:
+    get:
+      tags:
+        - Livre
+      summary: Affiche un livre selon son id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Le id du livre à afficher
+          schema:
+            type: integer
+      responses:
+        '200': 
+          description: Le livre à afficher
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Livre'
+  
     put:
       tags:
         - Livre
       summary: Modifier un livre.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Le id du livre à modifier
+          schema:
+            type: integer
       requestBody:
-        description: Les informations du livre à modifier. Il n'est pas nécessaire d'inclure tous les champs seulement ceux présent seront modifiés.
+        description: Les informations du livre à modifier.
         required: true
         content:
           application/json:
@@ -91,26 +118,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Livre'
-  
-  /books/{id}:
-    get:
-      tags:
-        - Livre
-      summary: Affiche un livre selon son id.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: Le id du livre à afficher
-          schema:
-            type: integer
-      responses:
-        '200': 
-          description: Le livre à afficher
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Livre'
     
     delete:
       tags:
@@ -125,36 +132,11 @@ paths:
             type: integer
       responses:
         '200': 
-          description: Le livre supprimer
+          description: Le livre supprimé
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Livre'
-  
-  /books/search:
-    post:
-      tags: 
-        - Livre
-      summary: Recherche de livres par titre.
-      requestBody:
-        description: Le texte à rechercher
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                titre:
-                  type: string
-              example:
-                titre: Fondation
-      responses:
-        '200': 
-          description: Le résultat de la recherche
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Livres'
 
   /authors:
     get:
@@ -220,6 +202,79 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Livres'
+
+  /authors/{id}:
+    get:
+      tags:
+        - Auteur
+      summary: Affiche un auteur selon son id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Le id de l'auteur à afficher
+          schema:
+            type: integer
+      responses:
+        '200': 
+          description: L'auteur à afficher
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auteur'
+  
+    put:
+      tags:
+        - Auteur
+      summary: Modifier un auteur.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Le id de l'auteur à modifier
+          schema:
+            type: integer
+      requestBody:
+        description: Les informations de l'auteur à modifier.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nom:
+                  type: string
+                prenom:
+                  type: string
+                example:
+                  nom: Asimov
+                  prenom: Isaac
+      responses:
+        '200': 
+          description: L'auteur modifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auteur'
+    
+    delete:
+      tags:
+        - Auteur
+      summary: Supprime un auteur selon son id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Le id du l'auteur à supprimer
+          schema:
+            type: integer
+      responses:
+        '200': 
+          description: L'auteur supprimé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auteur'
 
 components:
   schemas:

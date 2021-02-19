@@ -2,17 +2,17 @@
 
 namespace App\Action\Author;
 
-use App\Domain\Book\Service\BookViewer;
+use App\Domain\Book\Service\BookView;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class AuthorViewBookAction
 {
-    private $bookViewer;
+    private $bookView;
 
-    public function __construct(BookViewer $bookViewer)
+    public function __construct(BookView $bookView)
     {
-        $this->bookViewer = $bookViewer;
+        $this->bookView = $bookView;
     }
 
     public function __invoke(
@@ -22,13 +22,9 @@ final class AuthorViewBookAction
 
         $authorId = $request->getAttribute('id',0);
     
-        $books = $this->bookViewer->viewBookByAuthorId($authorId);
+        $books = $this->bookView->viewBookByAuthorId($authorId);
 
-        $result = [
-            'books' => $books
-        ];
-
-        $response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string)json_encode($books));
 
         return $response->withHeader('Content-Type', 'application/json');
     }

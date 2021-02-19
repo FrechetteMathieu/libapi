@@ -35,5 +35,19 @@ class AuthorViewRepository
 
         return $result;
     }
+
+    public function selectAuthor($id): array
+    {
+        $params = [ "id" => $id];
+        
+        $sql = "SELECT * FROM auteurs WHERE id = :id";
+
+        $query = $this->connection->prepare($sql);
+        $query->execute($params);
+
+        $result = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
 }
 

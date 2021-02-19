@@ -2,17 +2,17 @@
 
 namespace App\Action\Author;
 
-use App\Domain\Author\Service\AuthorViewer;
+use App\Domain\Author\Service\AuthorView;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class AuthorViewAction
 {
-    private $authorViewer;
+    private $authorView;
 
-    public function __construct(AuthorViewer $authorViewer)
+    public function __construct(AuthorView $authorView)
     {
-        $this->authorViewer = $authorViewer;
+        $this->authorView = $authorView;
     }
 
     public function __invoke(
@@ -20,13 +20,9 @@ final class AuthorViewAction
         ResponseInterface $response
     ): ResponseInterface {
 
-        $authors = $this->authorViewer->viewAuthors();
+        $authors = $this->authorView->viewAuthors();
 
-        $result = [
-            'authors' => $authors
-        ];
-
-        $response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string)json_encode($authors));
 
         return $response->withHeader('Content-Type', 'application/json');
     }

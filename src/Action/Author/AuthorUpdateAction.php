@@ -2,17 +2,17 @@
 
 namespace App\Action\Author;
 
-use App\Domain\Author\Service\AuthorCreate;
+use App\Domain\Author\Service\AuthorUpdate;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class AuthorCreateAction
+final class AuthorUpdateAction
 {
-    private $authorCreate;
+    private $authorUpdate;
 
-    public function __construct(AuthorCreate $authorCreate)
+    public function __construct(AuthorUpdate $authorUpdate)
     {
-        $this->authorCreate = $authorCreate;
+        $this->authorUpdate = $authorUpdate;
     }
 
     public function __invoke(
@@ -20,15 +20,13 @@ final class AuthorCreateAction
         ResponseInterface $response
     ): ResponseInterface {
 
+        $authorId = $request->getAttribute('id', 0);
         $data = (array)$request->getParsedBody();
 
-        $authorId = $this->authorCreate->createAuthor($data);
-        $result = [
-            'id' => $authorId
-        ];
+        $author = $this->authorUpdate->updateAuthor($authorId, $data);
 
         // Build the HTTP response
-        $response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string)json_encode($author));
 
         return $response
             ->withHeader('Content-Type', 'application/json')

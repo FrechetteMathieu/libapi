@@ -35,7 +35,7 @@ final class AuthorCreate
     public function createAuthor(array $data): int
     {
         // Input validation
-        $this->validateBookData($data);
+        $this->validateAuthorData($data);
 
         // Insert book
         $bookId = $this->repository->insertAuthor($data);
@@ -52,21 +52,17 @@ final class AuthorCreate
      *
      * @return void
      */
-    private function validateBookData(array $data): void
+    private function validateAuthorData(array $data): void
     {
         $errors = [];
 
-        
+        if(!isset($data['nom'])) {
+            $errors['nom'] = 'Champs requis';
+        }
 
-        // if (empty($data['username'])) {
-        //     $errors['username'] = 'Input required';
-        // }
-
-        // if (empty($data['email'])) {
-        //     $errors['email'] = 'Input required';
-        // } elseif (filter_var($data['email'], FILTER_VALIDATE_EMAIL) === false) {
-        //     $errors['email'] = 'Invalid email address';
-        // }
+        if(!isset($data['prenom'])) {
+            $errors['prenom'] = 'Champs requis';
+        }
 
         if ($errors) {
             throw new ValidationException('Please check your input', $errors);
