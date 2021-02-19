@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Action;
+namespace App\Action\Book;
 
 use App\Domain\Book\Service\BookDelete;
 use Psr\Http\Message\ResponseInterface;
@@ -24,10 +24,14 @@ final class BookDeleteAction
         $id = $request->getAttribute('id', 0);
 
         // Invoke the Domain with inputs and retain the result
-        $result = $this->BookDelete->deleteBook($id);
+        $deleteBook = $this->BookDelete->deleteBook($id);
         
+        $result = [
+            'book' => $deleteBook
+        ];
+
         // Build the HTTP response
-        $response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string)json_encode($deleteBook));
 
         return $response->withHeader('Content-Type', 'application/json');
     }

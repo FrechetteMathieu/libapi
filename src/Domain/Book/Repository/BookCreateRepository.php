@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Repository.
  */
-class BookCreatorRepository
+class BookCreateRepository
 {
     /**
      * @var PDO The database connection

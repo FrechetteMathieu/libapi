@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Action;
+namespace App\Action\Book;
 
-use App\Domain\Book\Service\BookViewer;
+use App\Domain\Book\Service\BookView;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class BookViewerByIdAction
+final class BookViewByIdAction
 {
-    private $bookViewer;
+    private $bookView;
 
-    public function __construct(bookViewer $bookViewer)
+    public function __construct(BookView $bookView)
     {
-        $this->bookViewer = $bookViewer;
+        $this->bookView = $bookView;
     }
 
     public function __invoke(
@@ -23,15 +23,10 @@ final class BookViewerByIdAction
         $id = $request->getAttribute('id', 0);
 
         // Invoke the Domain with inputs and retain the result
-        $book = $this->bookViewer->viewBookById($id);
-
-        // Transform the result into the JSON representation
-        $result = [
-            'books' => $book
-        ];
+        $book = $this->bookView->viewBookById($id);
 
         // Build the HTTP response
-        $response->getBody()->write((string)json_encode($result));
+        $response->getBody()->write((string)json_encode($book));
 
         return $response->withHeader('Content-Type', 'application/json');
     }
