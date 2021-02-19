@@ -24,7 +24,7 @@ final class BookUpdateAction
         $id = $request->getAttribute('id', 0);
         $data = (array)$request->getParsedBody();
         // Update the book values
-        $book = $this->bookUpdate->updateBook($data);
+        $book = $this->bookUpdate->updateBook($id, $data);
 
         $response->getBody()->write((string)json_encode($book));
 

@@ -30,7 +30,9 @@ return function (App $app) {
     // Créer un auteur
     $app->post('/authors', \App\Action\Author\AuthorCreateAction::class);
     // Modifier un auteur
+    $app->put('/authors/{id}', \App\Action\Author\AuthorUpdateAction::class);
     // Supprimer un auteur
+    $app->delete('/authors/{id}', \App\Action\Author\AuthorDeleteAction::class);
 
     // Afficher la liste des genres
     // Liste tous les livres d’un genre selon son id

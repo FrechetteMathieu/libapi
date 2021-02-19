@@ -6,6 +6,8 @@ use App\Domain\Author\Repository\AuthorUpdateRepository;
 use App\Domain\Author\Repository\AuthorViewRepository;
 use App\Factory\LoggerFactory;
 use Psr\Log\LoggerInterface;
+use App\Exception\ValidationException;
+use App\Exception\RessourceNotFoundException;
 
 /**
  * Service.
@@ -34,7 +36,7 @@ final class AuthorUpdate
      */
     public function __construct(
         AuthorUpdateRepository $repository, 
-        AuthorViewRepository $authorViewRepository, 
+        AuthorViewRepository $authorViewRepository,
         LoggerFactory $logger)
     {
         $this->repository = $repository;
@@ -55,25 +57,61 @@ final class AuthorUpdate
     public function updateAuthor(int $id, array $data): array
     {
         $updateSucceed = false;
-        // Validate if the book exist in the BD
-        $bookId = $data['genreId'] ?? 0;
-        //$authorToUpdate = $this->authorViewRepository->selec($bookId);
+        // Validate if author exist
+        $this->validateAuthor($id);
+        // Validate if all fields are sent
+        $this->validateAuthorData($data);
 
-        if(!empty($authorToUpdate)) {
-            // If there is no value for the field, keep the old value
-            $data['genreId'] = $data['genreId'] ?? $authorToUpdate[0]['genreId'];
-            $data['titre'] = $data['titre'] ?? $authorToUpdate[0]['titre'];
-            $data['isbn'] = $data['isbn'] ?? $authorToUpdate[0]['isbn'];
-            // Update book
-            $updateSucceed = $this->repository->updateBook($authorToUpdate[0]['id'], $data);
+        // Update book
+        $updateSucceed = $this->repository->updateAuthor($id, $data);
+
+        $this->logger->info("L'auteur id [{$id}]" . ($updateSucceed ? " a été modifié" : " n'a pu être modifié"));
+
+        return $data;
+    }
+
+    /**
+     * Input validation.
+     *
+     * @param array $data The form data
+     *
+     * @throws RessourceNotFoundException
+     *
+     * @return void
+     */
+    private function validateAuthor(int $id): void
+    {
+        $author = $this->authorViewRepository->selectAuthor($id);
+
+        if (empty($author)) {
+            throw new RessourceNotFoundException("Aucun auteur trouvé pour le id {$id}");
+        }
+    }
+
+    /**
+     * Input validation.
+     *
+     * @param array $data The form data
+     *
+     * @throws ValidationException
+     *
+     * @return void
+     */
+    private function validateAuthorData(array $data): void
+    {
+        $errors = [];
+
+        if(!isset($data['nom'])) {
+            $errors['nom'] = 'Champs requis';
         }
 
-        // Retrieve the updated book
-        $bookUpdated = $this->bookViewRepository->selectBookById($bookId);
+        if(!isset($data['prenom'])) {
+            $errors['prenom'] = 'Champs requis';
+        }
 
-        $this->logger->info("Le livre id [{$bookId}]" . ($updateSucceed ? " a été modifié" : " n'a pu être modifié"));
-
-        return $bookUpdated[0];
+        if ($errors) {
+            throw new ValidationException('Please check your input', $errors);
+        }
     }
 
 }
