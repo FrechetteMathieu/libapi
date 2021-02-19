@@ -7,7 +7,7 @@ use PDO;
 /**
  * Repository.
  */
-class AuthorViewerRepository
+class AuthorViewRepository
 {
     /**
      * @var PDO The database connection

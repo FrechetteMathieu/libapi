@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Action;
+namespace App\Action\Author;
 
-use App\Domain\Author\Service\AuthorViewer;
+use App\Domain\Book\Service\BookViewer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class AuthorViewAction
+final class AuthorViewBookAction
 {
-    private $authorViewer;
+    private $bookViewer;
 
-    public function __construct(AuthorViewer $authorViewer)
+    public function __construct(BookViewer $bookViewer)
     {
-        $this->authorViewer = $authorViewer;
+        $this->bookViewer = $bookViewer;
     }
 
     public function __invoke(
@@ -20,10 +20,12 @@ final class AuthorViewAction
         ResponseInterface $response
     ): ResponseInterface {
 
-        $authors = $this->authorViewer->viewAuthors();
+        $authorId = $request->getAttribute('id',0);
+    
+        $books = $this->bookViewer->viewBookByAuthorId($authorId);
 
         $result = [
-            'authors' => $authors
+            'books' => $books
         ];
 
         $response->getBody()->write((string)json_encode($result));

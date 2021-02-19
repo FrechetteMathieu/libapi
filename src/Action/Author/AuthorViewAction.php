@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Action;
+namespace App\Action\Author;
 
 use App\Domain\Author\Service\AuthorViewer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class AuthorViewBookAction
+final class AuthorViewAction
 {
     private $authorViewer;
 

@@ -12,6 +12,13 @@ paths:
       tags:
         - Livre
       summary: Affiche la liste de tous les livres.
+      parameters:
+        - in: query
+          name: titre
+          schema:
+            type: string
+          required: false
+          description: Une valeur pour filter par le titre
       responses:
         '200': 
           description: Un tableau de livres
@@ -19,26 +26,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Livres'
-  /books/{id}:
-    get:
-      tags:
-        - Livre
-      summary: Affiche un livre selon son id.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: Le id du livre à afficher
-          schema:
-            type: integer
-      responses:
-        '200': 
-          description: Le livre à afficher
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Livre'
-  /books/add:
+    
     post:
       tags: 
         - Livre
@@ -72,9 +60,170 @@ paths:
                   books_id:
                     type: integer
                 example:
-                  books_id : 1
+                  id : 1
+    
+    put:
+      tags:
+        - Livre
+      summary: Modifier un livre.
+      requestBody:
+        description: Les informations du livre à modifier. Il n'est pas nécessaire d'inclure tous les champs seulement ceux présent seront modifiés.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                genreId:
+                  type: integer
+                titre:
+                  type: string
+                isbn:
+                  type: string
+              example:
+                genreId : 1
+                titre: Fondation
+                isbn: '9782070463619'
+      responses:
+        '200': 
+          description: Le livre modifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Livre'
+  
+  /books/{id}:
+    get:
+      tags:
+        - Livre
+      summary: Affiche un livre selon son id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Le id du livre à afficher
+          schema:
+            type: integer
+      responses:
+        '200': 
+          description: Le livre à afficher
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Livre'
+    
+    delete:
+      tags:
+        - Livre
+      summary: Supprime un livre selon son id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Le id du livre à supprimer
+          schema:
+            type: integer
+      responses:
+        '200': 
+          description: Le livre supprimer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Livre'
+  
+  /books/search:
+    post:
+      tags: 
+        - Livre
+      summary: Recherche de livres par titre.
+      requestBody:
+        description: Le texte à rechercher
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                titre:
+                  type: string
+              example:
+                titre: Fondation
+      responses:
+        '200': 
+          description: Le résultat de la recherche
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Livres'
+
+  /authors:
+    get:
+      tags:
+        - Auteur
+      summary: Affiche la liste de tous les auteurs.
+      responses:
+        '200': 
+          description: Un tableau d'auteurs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auteurs'
+    
+    post:
+      tags: 
+        - Auteur
+      summary: Crée un auteur.
+      requestBody:
+        description: Les informations de l'auteur à créer
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nom:
+                  type: string
+                prenom:
+                  type: string
+              example:
+                nom: Asimov
+                prenom: Isaac
+      responses:
+        '201': 
+          description: Le id de l'auteur créé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  books_id:
+                    type: integer
+                example:
+                  id : 1
+    
+  /authors/{id}/books:
+    get:
+      tags:
+        - Auteur
+      summary: Affiche tous les livres d'un auteur selon son id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Le id de l'auteur
+          schema:
+            type: integer
+      responses:
+        '200': 
+          description: les livres de l'auteur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Livres'
+
 components:
   schemas:
+    
     Livre:
       type: object
       required:
@@ -97,7 +246,32 @@ components:
           genreId : 1
           titre: Fondation
           isbn: '9782070463619'
+    
     Livres:
       type: array
       items:
         $ref: '#/components/schemas/Livre'
+
+    Auteur:
+      type: object
+      required:
+        - genreId
+        - titre
+        - isbn
+      properties:
+        id:
+          type: integer
+          format: int64
+        nom:
+          type: string
+        prenom:
+          type: string
+      example:
+          id: 1
+          nom: Asimov
+          prenom: Isaac
+    
+    Auteurs:
+      type: array
+      items:
+        $ref: '#/components/schemas/Auteur'
