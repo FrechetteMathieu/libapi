@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Action;
+namespace App\Action\Book;
 
-use App\Domain\Book\Service\BookCreator;
+use App\Domain\Book\Service\BookCreate;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class BookCreateAction
 {
-    private $bookCreator;
+    private $bookCreate;
 
-    public function __construct(BookCreator $bookCreator)
+    public function __construct(BookCreate $bookCreate)
     {
-        $this->bookCreator = $bookCreator;
+        $this->bookCreate = $bookCreate;
     }
 
     public function __invoke(
@@ -22,9 +22,9 @@ final class BookCreateAction
 
         $data = (array)$request->getParsedBody();
 
-        $bookId = $this->bookCreator->createBook($data);
+        $bookId = $this->bookCreate->createBook($data);
         $result = [
-            'book_id' => $bookId
+            'id' => $bookId
         ];
 
         // Build the HTTP response
@@ -32,6 +32,6 @@ final class BookCreateAction
 
         return $response
             ->withHeader('Content-Type', 'application/json')
-            ->withStatus(201);
+            ->withStatus(201); // Le code d'état de la réponse
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Domain\Book\Repository;
+namespace App\Domain\Author\Repository;
 
 use PDO;
 
 /**
  * Repository.
  */
-class BookSearcherRepository
+class AuthorViewRepository
 {
     /**
      * @var PDO The database connection
@@ -24,20 +24,11 @@ class BookSearcherRepository
         $this->connection = $connection;
     }
 
-    /**
-     * Recherche un livre selon un mot clé
-     * 
-     * @return array La liste des livres trouvés
-     */
-    public function searchBookByTitle(array $data): array
+    public function selectAllAuthor(): array
     {
-        $titre = $data['titre'];
-
-        $sql = "SELECT * FROM livres 
-                WHERE titre LIKE :titre";
+        $sql = "SELECT * FROM auteurs";
 
         $query = $this->connection->prepare($sql);
-        $query->bindValue(':titre', '%' . $titre . '%');
         $query->execute();
 
         $result = $query->fetchAll(PDO::FETCH_ASSOC);

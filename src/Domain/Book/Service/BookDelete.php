@@ -3,7 +3,7 @@
 namespace App\Domain\Book\Service;
 
 use App\Domain\Book\Repository\BookDeleteRepository;
-use App\Domain\Book\Repository\BookViewerRepository;
+use App\Domain\Book\Repository\BookViewRepository;
 use App\Factory\LoggerFactory;
 use Psr\Log\LoggerInterface;
 
@@ -18,9 +18,9 @@ final class BookDelete
     private $repository;
 
     /**
-     * @var BookViewerRepository
+     * @var BookViewRepository
      */
-    private $bookViewerRepository;
+    private $bookViewRepository;
 
     /**
      * @var LoggerInterface
@@ -34,11 +34,11 @@ final class BookDelete
      */
     public function __construct(
         BookDeleteRepository $repository, 
-        BookViewerRepository $bookViewerRepository, 
+        BookViewRepository $bookViewRepository, 
         LoggerFactory $logger)
     {
         $this->repository = $repository;
-        $this->bookViewerRepository = $bookViewerRepository;
+        $this->bookViewRepository = $bookViewRepository;
         $this->logger = $logger
             ->addFileHandler('Books.log')
             ->createLogger("BookDelete");
@@ -49,12 +49,12 @@ final class BookDelete
      *
      * @param int $data The form data
      *
-     * @return int The new book ID
+     * @return array The deleted book object
      */
     public function deleteBook(int $id): array
     {
         $deleteSucceed = false;
-        $bookToDelete = $this->bookViewerRepository->selectBookById($id);;
+        $bookToDelete = $this->bookViewRepository->selectBookById($id);;
 
         if(!empty($bookToDelete)) {
             // Delete book
@@ -63,12 +63,7 @@ final class BookDelete
 
         $this->logger->info("Le livre id [{$id}]" . ($deleteSucceed ? " a été supprimé" : " n'a pu être supprimé"));
 
-        $result = [
-            'success' => $deleteSucceed,
-            'book' => $bookToDelete
-        ];
-
-        return $result;
+        return $bookToDelete[0] ?? [];
     }
 
 }

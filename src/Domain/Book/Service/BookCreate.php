@@ -2,25 +2,25 @@
 
 namespace App\Domain\Book\Service;
 
-use App\Domain\Book\Repository\BookCreatorRepository;
+use App\Domain\Book\Repository\BookCreateRepository;
 use App\Exception\ValidationException;
 
 /**
  * Service.
  */
-final class BookCreator
+final class BookCreate
 {
     /**
-     * @var BookCreatorRepository
+     * @var BookCreateRepository
      */
     private $repository;
 
     /**
      * The constructor.
      *
-     * @param BookCreatorRepository $repository The repository
+     * @param BookCreateRepository $repository The repository
      */
-    public function __construct(BookCreatorRepository $repository)
+    public function __construct(BookCreateRepository $repository)
     {
         $this->repository = $repository;
     }

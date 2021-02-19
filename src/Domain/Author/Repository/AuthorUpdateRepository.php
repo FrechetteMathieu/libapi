@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Book\Repository;
+namespace App\Domain\Author\Repository;
 
 use PDO;
 use App\Factory\LoggerFactory;
@@ -9,14 +9,14 @@ use Psr\Log\LoggerInterface;
 /**
  * Repository.
  */
-class BookCreatorRepository
+class AuthorUpdateRepository
 {
     /**
      * @var PDO The database connection
      */
     private $connection;
 
-    /**
+     /**
      * @var LoggerInterface
      */
     private $logger;
@@ -30,37 +30,39 @@ class BookCreatorRepository
     {
         $this->connection = $connection;
         $this->logger = $logger
-            ->addFileHandler('Books.log')
-            ->createLogger("BookCreatorRepository");
+            ->addFileHandler('Author.log')
+            ->createLogger("BookUpdateRepository");
     }
 
     /**
-     * Insert book row.
+     * Update an author
      *
-     * @param array $book The book
+     * @param array $is The author id to update
      *
-     * @return int The new ID
+     * @return bool Is the query succeed
      */
-    public function insertBook(array $book): int
+    public function updateAuthor(int $id, array $author): bool
     {
+
         $params = [
-            'genreId' => $book['genreId'] ?? 0,
-            'titre' => $book['titre'] ?? '',
-            'isbn' => $book['isbn'] ?? ''
+            'id' => $id,
+            'nom' => $author['nom'],
+            'prenom' => $author['prenom'],
         ];
 
-        $sql = "INSERT INTO livres (genreId, titre, isbn) 
-                VALUES (:genreId, :titre, :isbn)";
+        $sql = "UPDATE auteurs SET 
+                nom=:nom, 
+                prenom=:prenom
+                WHERE id = :id;";
 
         $query = $this->connection->prepare($sql);
-        $query->execute($params);
+        $result = $query->execute($params);
 
         $errorInfo = $query->errorInfo();
         if($errorInfo[0] != 0) {
             $this->logger->error($errorInfo[2]);
         }
 
-        return (int)$this->connection->lastInsertId();
+        return $result;
     }
 }
-

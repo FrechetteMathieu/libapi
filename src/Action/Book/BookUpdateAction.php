@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Action;
+namespace App\Action\Book;
 
 use App\Domain\Book\Service\BookUpdate;
 use Psr\Http\Message\ResponseInterface;
@@ -21,15 +21,12 @@ final class BookUpdateAction
     ): ResponseInterface {
 
         // Retrieve request parameter and body
-        $bookId = $request->getAttribute('id', 0);
+        $id = $request->getAttribute('id', 0);
         $data = (array)$request->getParsedBody();
         // Update the book values
-        $book = $this->bookUpdate->updateBook($bookId, $data);
-        // Build the HTTP response
-        $result = [
-            'book' => $book
-        ];
-        $response->getBody()->write((string)json_encode($result));
+        $book = $this->bookUpdate->updateBook($data);
+
+        $response->getBody()->write((string)json_encode($book));
 
         return $response
             ->withHeader('Content-Type', 'application/json')

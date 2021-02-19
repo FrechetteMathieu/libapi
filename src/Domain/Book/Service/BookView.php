@@ -2,17 +2,17 @@
 
 namespace App\Domain\Book\Service;
 
-use App\Domain\Book\Repository\BookViewerRepository;
+use App\Domain\Book\Repository\BookViewRepository;
 use App\Factory\LoggerFactory;
 use Psr\Log\LoggerInterface;
 
 /**
  * Service.
  */
-final class BookViewer
+final class BookView
 {
     /**
-     * @var BookViewerRepository
+     * @var BookViewRepository
      */
     private $repository;
 
@@ -24,15 +24,15 @@ final class BookViewer
     /**
      * The constructor.
      *
-     * @param BookViewerRepository $repository The repository
+     * @param BookViewRepository $repository The repository
      * @param LoggerFactory $logger The logger
      */
-    public function __construct(BookViewerRepository $repository, LoggerFactory $logger)
+    public function __construct(BookViewRepository $repository, LoggerFactory $logger)
     {
         $this->repository = $repository;
         $this->logger = $logger
             ->addFileHandler('Books.log')
-            ->createLogger("BookViewer");
+            ->createLogger("BookView");
     }
 
     /**
@@ -55,6 +55,30 @@ final class BookViewer
     public function viewBookById($id): array
     {
         $books = $this->repository->selectBookById($id);
+
+        return $books[0] ?? [];
+    }
+
+    /**
+     * Affiche tous les livres d'un auteur selon son id
+     *
+     * @return array La liste de tous les livres d'un auteur
+     */
+    public function viewBookByAuthorId($authorId): array
+    {
+        $books = $this->repository->selectBookByAuthorId($authorId);
+
+        return $books;
+    }
+
+    /**
+     * Affiche tous les livres qui ont le mot clé dans leur titre
+     *
+     * @return array La liste de tous les livres d'un auteur
+     */
+    public function viewBookByTitle($title): array
+    {
+        $books = $this->repository->selectBookByTitle($title);
 
         return $books;
     }
