@@ -5,7 +5,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 
 return function (App $app) {
-    $app->get('/', \App\Action\HomeAction::class)->setName('home');
+    $app->get('/', \App\Action\Docs\SwaggerUiAction::class)->setName('home');
 
     $app->post('/users', \App\Action\UserCreateAction::class);
 
