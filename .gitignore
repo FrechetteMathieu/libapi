@@ -1,2 +1,4 @@
 vendor/
 logs/
+# private.pem
+# public.pem

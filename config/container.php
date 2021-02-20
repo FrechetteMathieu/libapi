@@ -1,11 +1,16 @@
 <?php
 
+use App\Factory\LoggerFactory;
+use App\Routing\JwtAuth;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Selective\BasePath\BasePathMiddleware;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Middleware\ErrorMiddleware;
-use Selective\BasePath\BasePathMiddleware;
-use App\Factory\LoggerFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
@@ -70,6 +75,35 @@ return [
         return TwigMiddleware::createFromContainer(
             $container->get(App::class),
             Twig::class
+        );
+    },
+
+    ResponseFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(App::class)->getResponseFactory();
+    },
+
+    JwtAuth::class => function (ContainerInterface $container) {
+        $configuration = $container->get(Configuration::class);
+
+        $jwtSettings = $container->get('settings')['jwt'];
+        $issuer = (string)$jwtSettings['issuer'];
+        $lifetime = (int)$jwtSettings['lifetime'];
+
+        return new JwtAuth($configuration, $issuer, $lifetime);
+    },
+
+    Configuration::class => function (ContainerInterface $container) {
+        $jwtSettings = $container->get('settings')['jwt'];
+
+        $privateKey = (string)$jwtSettings['private_key'];
+        $publicKey = (string)$jwtSettings['public_key'];
+
+        // Asymmetric algorithms use a private key for signature creation
+        // and a public key for verification
+        return Configuration::forAsymmetricSigner(
+            new Sha256(),
+            InMemory::plainText($privateKey),
+            InMemory::plainText($publicKey)
         );
     },
 

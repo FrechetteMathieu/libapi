@@ -1,5 +1,7 @@
 {
     "require": {
+        "cakephp/chronos": "^2.1",
+        "lcobucci/jwt": "^3.4",
         "monolog/monolog": "^2.2",
         "php-di/php-di": "^6.3",
         "selective/basepath": "^2.0",
