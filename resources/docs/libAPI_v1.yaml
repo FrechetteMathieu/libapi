@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: LibAPI
-  description: Un API de livres créé dans le cadre du cours Services Web H2021
+  description: Un API de gestion de livres créé dans le cadre du cours Services Web H2021
   
 servers: 
   - url: http://localhost/libapi
@@ -246,9 +246,9 @@ paths:
                   type: string
                 prenom:
                   type: string
-                example:
-                  nom: Asimov
-                  prenom: Isaac
+              example:
+                nom: Asimov
+                prenom: Isaac
       responses:
         '200': 
           description: L'auteur modifié
