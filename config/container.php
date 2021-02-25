@@ -13,8 +13,6 @@ use Slim\Factory\AppFactory;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\StreamFactoryInterface;
 
 return [
     'settings' => function () {

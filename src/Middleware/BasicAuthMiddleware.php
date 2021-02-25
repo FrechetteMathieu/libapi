@@ -49,7 +49,7 @@ class BasicAuthMiddleware
         $token = explode(' ', $request->getHeaderLine('Authorization'))[1] ?? '';
 
         if (!$this->basicAuthValidation->isTokenValid($token)) {
-            // If the token is nor valid, return empty response qith status code 401
+            // If the token is not valid, return empty response qith status code 401
             return $this->responseFactory->createResponse()
                 ->withHeader('Content-Type', 'application/json')
                 ->withStatus(401, 'Unauthorized');
