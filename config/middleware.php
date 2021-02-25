@@ -3,7 +3,6 @@
 use Selective\BasePath\BasePathMiddleware;
 use Slim\Views\TwigMiddleware;
 use Slim\App;
-use App\Middleware;
 use App\Middleware\RouteLogMiddleware;
 
 return function (App $app) {

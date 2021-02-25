@@ -8,6 +8,8 @@ use Selective\BasePath\BasePathMiddleware;
 use App\Factory\LoggerFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 return [
     'settings' => function () {
@@ -71,6 +73,11 @@ return [
             $container->get(App::class),
             Twig::class
         );
+    },
+
+    // To create a new response
+    ResponseFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(App::class)->getResponseFactory();
     },
 
 ];

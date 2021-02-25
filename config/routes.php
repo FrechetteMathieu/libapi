@@ -2,6 +2,7 @@
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use App\Middleware\BasicAuthMiddleware;
 use Slim\App;
 
 return function (App $app) {
@@ -23,7 +24,7 @@ return function (App $app) {
     $app->delete('/books/{id}', \App\Action\Book\BookDeleteAction::class);
     
     // Afficher la liste des auteurs
-    $app->get('/authors', \App\Action\Author\AuthorViewAction::class);
+    $app->get('/authors', \App\Action\Author\AuthorViewAction::class)->add(BasicAuthMiddleware::class);
     // Liste tous les livres d’un auteur selon son id
     $app->get('/authors/{id}/books', \App\Action\Author\AuthorViewBookAction::class);
     // Créer un auteur
