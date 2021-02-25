@@ -2,6 +2,7 @@
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use App\Middleware\BasicAuthMiddleware;
 use Slim\App;
 use App\Middleware\JwtAuthMiddleware;
 use Slim\Routing\RouteCollectorProxy;
@@ -15,41 +16,26 @@ return function (App $app) {
     // Documentation
     $app->get('/v1/docs', \App\Action\Docs\SwaggerUiAction::class);
 
-
-    $app->group('/v1', function(RouteCollectorProxy $group) {
-        
-        // Afficher la liste de tous les livres, on peut ajouter le paramêtre titre pour filtrer par titre
-        $group->get('/books', \App\Action\Book\BookViewAction::class);
-        // Afficher un livre selon son id
-        $group->get('/books/{id}', \App\Action\Book\BookViewByIdAction::class);
-        // Créer un nouveau livre
-        $group->post('/books', \App\Action\Book\BookCreateAction::class);
-        // Éditer les informations d’un livre
-        $group->put('/books/{id}', \App\Action\Book\BookUpdateAction::class);
-        // Supprimer un livre 
-        $group->delete('/books/{id}', \App\Action\Book\BookDeleteAction::class); 
-
-        // Afficher la liste des auteurs
-        $group->get('/authors', \App\Action\Author\AuthorViewAction::class);
-        // Liste tous les livres d’un auteur selon son id
-        $group->get('/authors/{id}/books', \App\Action\Author\AuthorViewBookAction::class);
-        // Créer un auteur
-        $group->post('/authors', \App\Action\Author\AuthorCreateAction::class);
-        // Modifier un auteur
-        $group->put('/authors/{id}', \App\Action\Author\AuthorUpdateAction::class);
-        // Supprimer un auteur
-        $group->delete('/authors/{id}', \App\Action\Author\AuthorDeleteAction::class);
-
-        // Afficher la liste des genres
-        // Liste tous les livres d’un genre selon son id
-        // Créer un genre
-        // Modifier un genre
-        // Supprimer un genre
+    // Afficher la liste de tous les livres, on peut ajouter le paramêtre titre pour filtrer par titre
+    $app->get('/books', \App\Action\Book\BookViewAction::class);
+    // Afficher un livre selon son id
+    $app->get('/books/{id}', \App\Action\Book\BookViewByIdAction::class);
+    // Créer un nouveau livre
+    $app->post('/books', \App\Action\Book\BookCreateAction::class);
+    // Éditer les informations d’un livre
+    $app->put('/books/{id}', \App\Action\Book\BookUpdateAction::class);
+    // Supprimer un livre 
+    $app->delete('/books/{id}', \App\Action\Book\BookDeleteAction::class);
     
-    })->add(JwtAuthMiddleware::class);;
-    
-    
-    
-    
+    // Afficher la liste des auteurs
+    $app->get('/authors', \App\Action\Author\AuthorViewAction::class)->add(BasicAuthMiddleware::class);
+    // Liste tous les livres d’un auteur selon son id
+    $app->get('/authors/{id}/books', \App\Action\Author\AuthorViewBookAction::class);
+    // Créer un auteur
+    $app->post('/authors', \App\Action\Author\AuthorCreateAction::class);
+    // Modifier un auteur
+    $app->put('/authors/{id}', \App\Action\Author\AuthorUpdateAction::class);
+    // Supprimer un auteur
+    $app->delete('/authors/{id}', \App\Action\Author\AuthorDeleteAction::class);   
     
 };
