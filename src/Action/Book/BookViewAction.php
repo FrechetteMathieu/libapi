@@ -20,10 +20,12 @@ final class BookViewAction
         ResponseInterface $response
     ): ResponseInterface {
         // Collect input from the HTTP request
-        $parameters = $request->getQueryParams();
-        $title = $parameters['titre'] ?? null;
+        $queryParams = $request->getQueryParams();
+        $title = $queryParams['titre'] ?? null;
         
-        $books = isset($title) ? $this->bookView->viewBookByTitle($title) : $this->bookView->viewBook();
+        $books = isset($title) 
+            ? $this->bookView->viewBookByTitle($title) 
+            : $this->bookView->viewBook($queryParams);
 
         // Build the HTTP response
         $response->getBody()->write((string)json_encode($books));

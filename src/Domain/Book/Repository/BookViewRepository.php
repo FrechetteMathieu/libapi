@@ -40,6 +40,26 @@ class BookViewRepository
     }
 
     /**
+     * Sélectionne tous les livres de la page
+     */
+    public function selectAllBookWithPagination(int $noPage, int $nbLivreParPage): array
+    {
+        $offset = ($noPage - 1) * $nbLivreParPage;
+
+        $sql = "SELECT * FROM livres LIMIT :nbRecord OFFSET :offset";
+
+        $query = $this->connection->prepare($sql);
+        $query->bindValue(':nbRecord', (int)$nbLivreParPage, PDO::PARAM_INT);
+        $query->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+
+        $query->execute();
+
+        $result = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
+    /**
      * Sélectionne un livre selon son id
      */
     public function selectBookById(int $id): array
@@ -99,6 +119,18 @@ class BookViewRepository
         $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
+    }
+
+    public function countBooks(): int
+    {
+        $sql = "SELECT COUNT(*) AS nbTotal FROM livres";
+
+        $query = $this->connection->prepare($sql);
+        $query->execute();
+
+        $nbBooks = $query->fetchAll(PDO::FETCH_ASSOC)[0]['nbTotal'] ?? 0;
+
+        return $nbBooks;
     }
 }
 
