@@ -40,11 +40,25 @@ final class BookView
      *
      * @return array La liste de tous les livres
      */
-    public function viewBook(): array
+    public function viewBook(array $queryParams): array
     {
-        $books = $this->repository->selectAllBook();
-        
-        return $books;
+        $pageNo = $queryParams['page'] ?? null;
+        $nbLivreParPage = $queryParams['nblivres'] ?? 10;
+
+        if(isset($pageNo)) {
+            $books = $this->repository->selectAllBookWithPagination($pageNo, $nbLivreParPage);
+            $nbBooksTotal = $this->repository->countBooks();
+            $results = [
+                "books" => $books,
+                "page" => (int)$pageNo,
+                "pageTotal" => ceil($nbBooksTotal / $nbLivreParPage),
+                "nbLivreParPage" => (int)$nbLivreParPage
+            ];
+        } else {
+            $results = $this->repository->selectAllBook();
+        }
+
+        return $results;
     }
 
     /**
