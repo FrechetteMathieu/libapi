@@ -75,4 +75,15 @@ $settings['twig'] = [
     ],
 ];
 
+// JWT settings
+$settings['jwt'] = [
+    // The issuer name
+    'issuer' => 'libAPI',
+    // Max lifetime in seconds
+    'lifetime' => 14400,
+    // The private key
+    'private_key' => file_get_contents('../private.pem'),
+    'public_key' => file_get_contents('../public.pem'),
+    ];
+
 return $settings;

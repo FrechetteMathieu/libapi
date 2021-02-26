@@ -4,6 +4,7 @@ use Selective\BasePath\BasePathMiddleware;
 use Slim\Views\TwigMiddleware;
 use Slim\App;
 use App\Middleware\RouteLogMiddleware;
+use App\Middleware\JwtClaimMiddleware;
 
 return function (App $app) {
     // Log enpoint access
@@ -12,6 +13,7 @@ return function (App $app) {
     // Parse json, form data and xml
     $app->addBodyParsingMiddleware();
 
+    $app->add(JwtClaimMiddleware::class);
     $app->add(TwigMiddleware::class);
 
     // Add the Slim built-in routing middleware
