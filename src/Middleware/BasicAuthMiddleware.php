@@ -32,7 +32,6 @@ class BasicAuthMiddleware
     }
     
     /**
-     * Example middleware invokable class
      *
      * @param  ServerRequest  $request PSR-7 request
      * @param  RequestHandler $handler PSR-15 request handler
@@ -42,9 +41,7 @@ class BasicAuthMiddleware
     public function __invoke(
         Request $request, 
         RequestHandler $handler): ResponseInterface
-    {
-        // Build response from the request. Will be used if authentification is valid.
-        $response = $handler->handle($request);
+    {        
         // Extract encode token from header
         $token = explode(' ', $request->getHeaderLine('Authorization'))[1] ?? '';
 
@@ -54,8 +51,8 @@ class BasicAuthMiddleware
                 ->withHeader('Content-Type', 'application/json')
                 ->withStatus(401, 'Unauthorized');
         }
-
+       
         // Otherwise return unmodified response.
-        return $response;
+        return $handler->handle($request);
     }
 }

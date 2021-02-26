@@ -75,6 +75,7 @@ $settings['twig'] = [
     ],
 ];
 
+// JWT settings
 $settings['jwt'] = [
     // The issuer name
     'issuer' => 'libAPI',
