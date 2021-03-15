@@ -5,7 +5,8 @@ info:
   description: Un API de gestion de livres créé dans le cadre du cours Services Web H2021
   
 servers: 
-  - url: http://localhost/libapi/v1
+  - url: https://radiant-bastion-07365.herokuapp.com
+  - url: http://localhost/libapi
 paths:
   /books:
     get:
@@ -18,7 +19,19 @@ paths:
           schema:
             type: string
           required: false
-          description: Une valeur pour filter par le titre
+          description: Une valeur pour filter par le titre.
+        - in: query
+          name: page
+          schema:
+            type: string
+          required: false
+          description: La page à afficher
+        - in: query
+          name: nblivres
+          schema:
+            type: string
+          required: false
+          description: Le nombre de livres à afficher par page.
       responses:
         '200': 
           description: Un tableau de livres
