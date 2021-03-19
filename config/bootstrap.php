@@ -4,6 +4,7 @@ use DI\ContainerBuilder;
 use Slim\App;
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/env.php'; // Charger les variables d'environnement
 
 $containerBuilder = new ContainerBuilder();
 
