@@ -16,8 +16,8 @@ return function (App $app) {
     $app->add(JwtClaimMiddleware::class);
     $app->add(TwigMiddleware::class);
 
+    // Ajoutez cette ligne
     $app->add(\App\Middleware\CorsMiddleware::class);
-    
     // Add the Slim built-in routing middleware
     $app->addRoutingMiddleware();
 
