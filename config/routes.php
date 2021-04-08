@@ -30,7 +30,7 @@ return function (App $app) {
     // Éditer les informations d’un livre
     $app->put('/books/{id}', \App\Action\Book\BookUpdateAction::class);
     // Supprimer un livre 
-    $app->delete('/books/{id}', \App\Action\Book\BookDeleteAction::class)->add(\App\Middleware\JwtAuthMiddleware::class);
+    $app->delete('/books/{id}', \App\Action\Book\BookDeleteAction::class);
 
     
     $app->options('/authors', \App\Action\PreflightAction::class);
